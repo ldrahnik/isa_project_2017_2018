@@ -63,25 +63,25 @@
 
 \section*{Návrh programu}
 \begin{itemize}
-  \item Z důvodu zadání, kdy program musí monitorovat jednotlivé uzly paralelně, také musí být schopen paralelně odpovídat na přicházející UDP pakety v případě spínače -l jsou v projektu použita vlákna.
-  Pro každý uzel je vytvořeno vlákno na odesílání i na přijímání. Jelikož je program tvořen na dlouhodobý běh jsou vlákna k nekonečných smyčkách až do jeho ukončení. Po ukončení vláken dojde k uvolnění alokované paměti.
+  \item Ze zadání program musí monitorovat jednotlivé uzly paralelně a tedy musí být schopen paralelně odesílat i přijímat přicházející pakety, v případě spínače -l přijímat a odesílat, proto jsou použita vlákna.
+  Pro každý uzel je vytvořeno vlákno na odesílání i na přijímání. Jelikož je program tvořen na dlouhodobý běh jsou vlákna v nekonečných smyčkách až do jeho ukončení. Po ukončení vláken dojde k uvolnění alokované paměti.
   Program se nachází v jednom souboru s názvem testovac.cpp a je strukturován do logicky oddělených bloků tvořenými funkcemi.
   \item Z důvodu použitých socketů je potřeba projekt pouštet se sudo.
 \end{itemize}
 
 \section*{Návrh programu}
 \begin{itemize}
-  \item Program pracuje s následujícími netinet hlavičkami, které poskytují potřebné struktury, konstanty atd. pro snadnější implementaci:
+  \item Program pracuje s následujícími inet hlavičkami, které poskytují potřebné struktury, konstanty atd. pro snadnější implementaci:
 
   \lstset{language=C++}
   \begin{lstlisting}[frame=single,breaklines]
 
+  #include <arpa/inet.h>
   #include <netinet/in.h>
   #include <netinet/ip.h>
   #include <netinet/ip6.h>
   #include <netinet/ip_icmp.h>
   #include <netinet/icmp6.h>
-  #include <netinet/udp.h>
 
   \end{lstlisting}
 \end{itemize}
