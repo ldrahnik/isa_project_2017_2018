@@ -1,0 +1,289 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage[left=2cm,top=3cm,text={17cm,24cm}]{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{url}
+
+\title{Měření ztrátovosti a RTT\\
+{\bf\large ISA - Programování síťové služby}}
+
+\author{Vysoké učení technické v Brně}
+
+\date{\url{https://github.com/ldrahnik/isa_1_project/}}
+
+\date{Lukáš Drahník (xdrahn00), 19.11.2017}
+
+\begin{document}
+
+{\let\newpage\relax\maketitle}
+
+\newpage
+
+\section*{Obsah}
+\begin{itemize}
+  \item Úvod
+  \item Návrh programu
+  \item Implementace
+  \begin{itemize}
+     \item ICMPv4
+     \item ICMPv6
+     \item UDPv4
+     \item UDPv6
+     \item UDPv6/v4 server
+   \end{itemize}
+  \item Rozšíření
+  \begin{itemize}
+     \item RPM
+     \begin{itemize}
+        \item Vytvoření .spec souboru
+        \item Vytvoření RPM, instalace a odinstalace
+     \end{itemize}
+     \item Možnost zadání specifického RTT pro uzel
+     \begin{itemize}
+        \item Upřesnění zadání
+        \item Implementace
+     \end{itemize}
+  \end{itemize}
+  \item Výpočet RTT
+  \item Příklad použití
+  \item Hiearchie projektu
+  \item Metriky kódu
+  \item Závěr
+\end{itemize}
+
+\newpage
+
+\section*{Úvod}
+\begin{itemize}
+  \item Dokumentace má za účel vysvětlit jak došlo k návrhu programu co se především týče k zadání, jeho implementace a způsob použití. Dále je také věnovaná část k vysvětlení implementace obou z navrhovaných rozšíření.
+\end{itemize}
+
+\section*{Návrh programu}
+\begin{itemize}
+  \item Z důvodu zadání, kdy program musí monitorovat jednotlivé uzly paralelně, také musí být schopen paralelně odpovídat na přicházející UDP pakety v případě spínače -l jsou v projektu použita vlákna.
+  Pro každý uzel je vytvořeno vlákno na odesílání i na přijímání. Jelikož je program tvořen na dlouhodobý běh jsou vlákna k nekonečných smyčkách až do jeho ukončení. Po ukončení vláken dojde k uvolnění alokované paměti.
+  Program se nachází v jednom souboru s názvem testovac.cpp a je strukturován do logicky oddělených bloků tvořenými funkcemi.
+  \item Z důvodu použitých socketů je potřeba projekt pouštet se sudo.
+\end{itemize}
+
+\section*{Návrh programu}
+\begin{itemize}
+  \item Program pracuje s následujícími netinet hlavičkami, které poskytují potřebné struktury, konstanty atd. pro snadnější implementaci:
+
+  \lstset{language=C++}
+  \begin{lstlisting}[frame=single,breaklines]
+
+  #include <netinet/in.h>
+  #include <netinet/ip.h>
+  #include <netinet/ip6.h>
+  #include <netinet/ip_icmp.h>
+  #include <netinet/icmp6.h>
+  #include <netinet/udp.h>
+
+  \end{lstlisting}
+\end{itemize}
+
+\section*{Implementace}
+\begin{itemize}
+  \item Všechny odeslané pakety kromě UDP serveru se ukládají do struktury napříč vlákny z důvodu výpočtu procentuálního podílu ztracených paketů z odeslaných. Náhodná data dána přepínačem -s jsou připojena vždy na konci zásobníku pro odeslání.
+  Ve strukturách není všude použito AF\_INET ikdyž by tak být mohlo. AF\_INET je použito pro práci s adresou. Pro práci s socketem, bindování atd. je použito PF\_INET. UDP pakety pracují se soketem SOCK\_DGRAM, ICMP pakety s SOCK\_RAW.
+\end{itemize}
+
+\section*{ICMPv4}
+\begin{itemize}
+  \item Jako hlavička je použitá struktura icmp a icmp\_type zpráv ICMP\_ECHO a ICMP\_REPLY. Timeval pro výpočet RTT se ukládává přímo do struktury do položky. Náhodná data jsou připojena za strukturu icmp.
+\end{itemize}
+
+\section*{ICMPv6}
+\begin{itemize}
+  \item Jako hlavička je použitá struktura icmp6\_hdr a icmp6\_type zpráv ICMP6\_ECHO\_REQUEST a IPPROTO\_ICMPV6. Timeval pro výpočet RTT se ukládává za strukturu icmp6\_hdr. Náhodná data jsou připojena za strukturu timeval.
+\end{itemize}
+
+\section*{UDPv4}
+\begin{itemize}
+  \item Jako hlavička je použitá vlastní struktura outdata\_udp, která obsahuje timeval pro výpočet RTT. Náhodná data jsou připojena za tuto strukturu.
+\end{itemize}
+
+\section*{UDPv6}
+\begin{itemize}
+  \item Kromě úprav pro práci s v6 adresami je implementace stejná jako u UDPv4.
+\end{itemize}
+
+\section*{UDPv6/v4 server}
+\begin{itemize}
+  \item UDP server je naimplementován ve vlastním vlákně, je schopný přijímat jak IPv6 i IPv4 nastavením socket option IPV6\_V6ONLY na false. Přijímá všechny pakety na zadaném portu přepínačem -l
+  a ty poté okamžitě odesílá v nezměněné podobě. Adresy akceptuje všechny zadáním in6addr\_any.
+\end{itemize}
+
+\section*{Rozšíření}
+
+Byla naimplementována obě z nabízených rozšíření.
+
+\section*{RPM}
+\begin{itemize}
+  \item K vytvoření RPM balíčku bylo nutné přidat do projektu soubor .spec, který obsahuje mmj. informace o verzi, kde projekt stáhnu (případně by bylo možné stažení zakombinovat do prep sekce),
+  jak projekt nainstaluji, s jakými soubory projekt manipuluje. Sekce install odkazuje na soubor Makefile. Aby byly cesty relativní, je souboru Makefile předána proměnná BUILD\_ROOT.
+
+  \item Na instalaci se silně doporučuje použít například alien z důvodu ošetření závislostí atd. Doporučuje se tedy neinstalovat přímo rpm nebo dokonce z Makefile:
+
+  \lstset{language=Bash}
+  \begin{lstlisting}[frame=single,breaklines]
+
+  # USING MAKEFILE INSIDE PROJECT (THERE IS NO WAY HOW TO REMOVE, DO NOT DO IT)
+
+  sudo make install
+
+
+  # DIRECTLY FROM CREATED RPM
+
+  # build rpm
+  rpmbuild -ba <package-spec-file>.spec
+
+  # install rpm
+  rpm -Uvh <rpm-file>.rpm -v
+
+  # find package
+  rpm -qa | grep -i <package-name>
+
+  # uinstall
+  rpm -e <package-name>
+
+
+  # USING ALIEN (HIGHLY RECOMMENDED)
+
+  # build rpm
+  rpmbuild -ba <package-spec-file>.spec
+
+  # create .deb
+  sudo alien <rpm-file>.rpm
+
+  # install
+  sudo dpkg -i <package-name>.deb
+
+  # uinstall
+  sudo dpkg --remove <package-name>
+
+\end{lstlisting}
+\end{itemize}
+
+\section*{Specifické RTT pro node}
+\begin{itemize}
+  \item Rozšíření spočívá v možnosti uvedení přepínačem -r pro každý uzel zvlášť a to v syntaxy \textless uzel;RTT \textgreater.
+  Pokud dojde k zadání RTT u konkrétního uzlu, je tato hodnota RTT prioritizována nad globální hodnotou pro všechny uzly zadanou přepínačem -r.
+
+  \item Implementace rozšíření spočívala v přidání kontroly zda se jedná o uzel s RTT nebo bez do funkce getNode a případné uložení hodnoty do
+  struktury uzlu, která se následně používá dle výše zmíněné priority. K implementaci byly použity strrchr (obdoba funkce strchr) a strtof. První z vyjmenovaných pokud
+  najde v řetězci - zprava - výskyt oddělovače, který je v našem případě ; tak vrátí pointer. Dojde tedy k oddělení řetězce na 2 části a o pokus o převedení do float pomocí funkce strtof.
+  Je třeba dát pozor na zadávání, v případě středníku v příkazové řádce je potřeba dát celý node do uvozovek nebo znak escapovat následovně:
+
+  \lstset{language=Bash}
+  \begin{lstlisting}[frame=single,breaklines]
+    sudo ./testovac 'seznam.cz;0.001' google.com\;0.002
+  \end{lstlisting}
+
+\end{itemize}
+
+\section*{Výpočet RTT}
+\begin{itemize}
+  \item Výpočet je nutné provádět pro každé vlákno zvlášť. RTT se počítá minimální, maximální, průměrné a standartní odchylka, která se počítá jako:
+\begin{verbatim}
+    (SQRT(SUM(RTT*RTT) / N – (SUM(RTT)/N)^2)).
+\end{verbatim}
+\end{itemize}
+
+\section*{Příklad použití}
+\begin{itemize}
+  \item Program slouží pro dlouhodobý běh, jakkákoliv průběžně alokovaná paměť během během běhu programu (například pro výpis) je okamžitě dealokována. Základní příklad použití při monitorování sebe sama v4 a v6, interval zasílání zpráv 2s, doba vyhodnocování 5s:
+
+  \lstset{language=Bash}
+  \begin{lstlisting}[frame=single,breaklines]
+    sudo ./testovac 'localhost;0.001' ::1\;0.002 -v -i 200000 -t 5
+    2017-11-19 14:29:27.83 104 bytes from localhost (127.0.0.1) time=0.000 ms
+    2017-11-19 14:29:27.83 64 bytes from ::1 (::) time=0.000 ms
+    2017-11-19 14:29:29.83 104 bytes from localhost (127.0.0.1) time=0.000 ms
+    2017-11-19 14:29:29.83 64 bytes from ::1 (::) time=0.000 ms
+    2017-11-19 14:29:31.83 104 bytes from localhost (127.0.0.1) time=0.000 ms
+    2017-11-19 14:29:31.83 64 bytes from ::1 (::) time=0.000 ms
+    2017-11-19 14:29:33.83 104 bytes from localhost (127.0.0.1) time=0.000 ms
+    2017-11-19 14:29:33.83 64 bytes from ::1 (::) time=0.000 ms
+    2017-11-19 14:29:35.83 104 bytes from localhost (127.0.0.1) time=0.000 ms
+    2017-11-19 14:29:35.83 64 bytes from ::1 (::) time=0.000 ms
+    2017-11-19 14:29:37.83 64 bytes from ::1 (::) time=0.000 ms
+  \end{lstlisting}
+  \item
+
+\end{itemize}
+
+\section*{Hiearchie projektu}
+
+/.git \newline
+/.vagrant \newline
+/doc \newline
+/doc/.gitignore \newline
+/doc/.local.lib \newline
+/doc/Makefile \newline
+/doc/manual.aux \newline
+/doc/manual.bbl \newline
+/doc/manual.blg \newline
+/doc/manual.dvi \newline
+/doc/manual.log \newline
+/doc/manual.pdf \newline
+/doc/manual.ps \newline
+/doc/manual.tex \newline
+/src/testovac.cpp \newline
+/src/testovac.o \newline
+/.gitignore \newline
+/LICENSE \newline
+/Makefile \newline
+/testovac \newline
+/testovac.1 \newline
+/testovac.spec \newline
+/Vagrantfile \newline
+
+Obsah .gitignore:
+
+\begin{lstlisting}[frame=single,breaklines]
+*.o
+testovac
+*.tar
+\end{lstlisting}
+
+Obsah /doc/.gitignore:
+
+\begin{lstlisting}[frame=single,breaklines]
+*.aux
+*.dvi
+*.log
+*.blg
+*.bbl
+*.pdf
+*.ps
+\end{lstlisting}
+
+\section*{Metriky kódu}
+\begin{itemize}
+  \item Velikost souboru /src/testovac.cpp: 48509B
+  \item Velikost spustitelného souboru /testovac: 37360B
+\end{itemize}
+
+\section*{Závěr}
+\begin{itemize}
+  \item Dokumentace byla vypracována pomocí Latex. Program je překládaný překladačem g++. Program byl otestován lokálně na Ubuntu16.04, po síti na Ubuntu16.04 a v CentOS virtuálním prostředí (předvytvořený Vagrantfile defaultně sdílí složku ze které se spouští,
+  proto došlo k přesunutí do projektu), které bylo vyžadováno k běhu programu (po tomto otestování došlo například na odebrání knihovny pro string).
+  \item Projekt může sloužit jako analyzátor chování sítě.
+\end{itemize}
+
+\nocite{*}
+
+%% BIBLIOGRAPHY
+\bibliography{local}
+\bibliographystyle{plain}
+
+\newpage
+\thispagestyle{empty}
+
+\end{document}
+%% END OF FILE

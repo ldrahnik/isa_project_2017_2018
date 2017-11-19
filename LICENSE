@@ -1,0 +1,45 @@
+OPEN SOURCE LICENCE VUT V BRNĚ
+Verze 1.
+Copyright (c) 2010, Vysoké učení technické v Brně, Antonínská 548/1, PSČ 601 90
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSTALACÍ, KOPÍROVÁNÍM NEBO JINÝM POUŽITÍM SOFTWARE POTVRZUJETE, ŽE SOUHLASÍTE S PODMÍNKAMI TÉTO LICENČNÍ SMLOUVY. POKUD S TĚMITO PODMÍNKAMI NESOUHLASÍTE, SOFTWARE NEINSTALUJTE, NEKOPÍ-RUJTE ANI NEPOUŽÍVEJTE.
+JESTLIŽE NEMÁTE PLATNOU LICENCI NA SOFTWARE, NEJSTE OPRÁVNĚNI SOFTWARE INSTALOVAT, KOPÍROVAT ANI JINAK POUŽÍVAT.
+
+Definice:
+
+Software se pro účely této smlouvy rozumí počítačový program (skupina počítačových programů tvořící jeden funkční celek) schopný autorskoprávní ochrany a s ním související dokumentace.
+
+Dílem založeným na Software se pro účely této smlouvy rozumí dílo, které obsahuje zcela nebo jen zčásti Software nebo jakoukoli jeho část, popřípadě je ze Software nebo jeho části odvozeno. Na části díla schopného samostatné-ho užití, které neobsahují žádnou část Software ani nejsou ze Software odvozeny, se tato definice nevztahuje, pokud jsou šířeny samostatně.
+
+Zdrojovým kódem se pro účely této licence rozumí veškerý zdrojový kód pro všechny moduly, které Software nebo dílo na něm založené obsahuje, plus jakékoli další soubory pro definici rozhraní, plus dávkové soubory potřebné pro kompilaci a instalaci spustitelného programu. Zvláštní výjimkou jsou však ty programové komponenty, které jsou normálně šířeny (buď ve zdrojové, nebo binární formě) s hlavními součástmi operačního systému, na němž spustitelný program běží (tj. s překladačem, jádrem apod.).
+
+Každý, kdo použije Software, stává se Uživatelem. Uživatel se zavazuje dodržovat tyto licenční podmínky.
+
+VUT V BRNĚ UDĚLUJE UŽIVATELI LICENCI K UŽÍVÁNÍ SOFTWARE ZA NÁSLEDUJÍCÍCH PODMÍNEK:
+
+Uživatel smí užívat Software zdarma pro vlastní potřebu k jakýmkoli účelům.
+Uživatel smí kopírovat a šířit doslovné kopie spustitelného Software a zdrojového kódu Software tak, jak jej obdržel, na libovolném médiu, za předpokladu, že na každé kopii viditelně a náležitě zveřejní zmínku o autorských právech a absenci záruky, ponechá nedotčené všechny zmínky vztahující se k této licenci a k absenci záruky a dá každému příjemci spolu se Software kopii této licenční smlouvy. Za fyzický akt pře-nesení kopie může Uživatel žádat poplatek a podle vlastního uvážení může nabídnout za poplatek záruční ochranu.
+Uživatel může modifikovat svoji kopii či kopie Software anebo kterékoliv jeho části, a tak vytvořit dílo zalo-žené na Software, a kopírovat a rozšiřovat takové modifikace či dílo, pokud jasně uvede, že se jedná o modifikované dílo. Tyto modifikace či dílo lze licencovat pouze za podmínek čl. 2 těchto licenčních pod-mínek, bez ohledu na to, zda jsou šířeny samostatně nebo ve spojení s jiným dílem.
+Ustanovení předchozí věty se však nepoužije na díla, která jsou pouhým spojením jiného díla, jež není na Software založeno, se Software nebo dílem založeným na Software na paměťovém nebo distribučním mé-diu.
+Kopie Software nebo díla na něm založeného v objektové anebo spustitelné podobě musí Uživatel:
+a) doprovodit zdrojovým kódem ve strojově čitelné formě. Zdrojový kód musí být rozšiřován podle usta-novení čl. 2, a to na médiu běžně používaném pro výměnu programového vybavení; nebo
+b) doprovodit písemnou nabídkou nejméně na tři roky, podle níž poskytne Uživatel jakékoli třetí straně, za poplatek nepřevyšující výdaje skutečně vynaložené na fyzickou výrobu zdrojové distribuce, kompletní strojově čitelnou kopii odpovídající zdrojovému kódu, jenž musí být šířen podle ustanovení čl. 2 na médiu běžně používaném pro výměnu programového vybavení; nebo
+c) doprovodit informacemi, které dostal ohledně nabídky na poskytnutí zdrojového kódu. (Tato alterna-tiva je povolena jen pro nekomerční šíření a jenom tehdy, pokud Uživatel obdržel program v objektovém nebo spustitelném tvaru spolu s takovou nabídkou, v souladu s písmenem b výše.)
+Uživatel nesmí kopírovat, modifikovat, poskytovat sublicence anebo šířit Software jiným způsobem než výslovně uvedeným v této licenci. Jakýkoli jiný pokus o kopírování, modifikování, poskytnutí sublicence anebo šíření Software je neplatný a automaticky ukončí práva daná touto licencí. Třetí osoby, které od Uživatele obdržely kopie anebo práva v souladu s touto licencí, však nemají své sublicence ukončeny, do-kud je jejich chování v souladu s těmito licenčními podmínkami.
+Pokud nemůže Uživatel šířit Software tak, aby vyhověl zároveň svým závazkům vyplývajícím z této smlou-vy a jiným platným závazkům, nesmí jej v důsledku toho šířit vůbec.
+Uživatel není odpovědný za vymáhání dodržování podmínek této licence třetími stranami.
+VZHLEDEM K BEZPLATNÉMU POSKYTNUTÍ LICENCE K SOFTWARE SE NA SOFTWARE NEVZTAHUJE ŽÁDNÁ ZÁRUKA, A TO V MÍŘE POVOLENÉ ZÁKONEM. POKUD NENÍ PÍSEMNĚ STANOVENO JINAK, POSKYTUJE VUT V BRNĚ SOFTWARE TAK, JAK JE", BEZ ZÁRUKY JAKÉHOKOLIV DRUHU, AŤ VÝSLOVNÉ NEBO KONKLUDENT-NÍ, VČETNĚ, ALE NEJENOM, ZÁRUK ZA KVALITU A VÝKONNOST SOFTWARE, ZA PRODEJNOST A VHODNOS-TI PRO URČITÝ ÚČEL.
+VUT V BRNĚ V ŽÁDNÉM PŘÍPADĚ NEODPOVÍDÁ ZA ŠKODY, VČETNĚ VŠECH OBECNÝCH, SPECIÁLNÍCH, SKU-TEČNÝCH NEBO UŠLÉHO ZISKU VYPLÝVAJÍCÍCH Z UŽÍVÁNÍ ANEBO NESCHOPNOSTI UŽÍVAT SOFTWARE (VČETNĚ ALE NIKOLI JEN, ZTRÁTY NEBO ZKRESLENÍ DAT, NEBO TRVALÝCH ŠKOD ZPŮSOBENÝCH VÁM NE-BO TŘETÍM STRANÁM, SELHÁNÍ FUNKCE SOFTWARE V SOUČINNOSTI S JINÝMI SOFTWARE, NEBO V PŘÍPADĚ, ŽE PROGRAM PORUŠUJE PRÁVA TŘETÍCH OSOB), A TO I V PŘÍPADĚ, ŽE VUT V BRNĚ VĚDĚLO O MOŽNOSTI TAKOVÝCH ŠKOD, TO VŠE V NEJŠIRŠÍ MOŽNÉ MÍŘE POVOLENÉ ZÁKONEM.
+Závěrečná ustanovení:
+
+Nevynutitelnost anebo neplatnost anebo neúčinnost kteréhokoli ujednání této smlouvy neovlivní vynutitelnost anebo platnost anebo účinnost jejích ostatních ustanovení.
+
+Tyto licenční podmínky poskytují stejný rozsah licenčních oprávnění jako licenční podmínky GNU GPL licencí a Software splňuje podmínky pro označení Open Source Software.
+
+Otázky touto smlouvou neupravené včetně otázek jejího vzniku a zániku se řídí českým právem.
+
+V případě soudního sporu budou příslušné české obecné soudy.
+
+Instalací, kopírováním nebo jiným použitím Software Uživatel prohlašuje, že se s obsahem této smlouvy důkladně seznámil, že je souhlas s touto smlouvou projevem jeho skutečné, vážné, svobodné a určité vůle prosté omylu a že není uzavřena v tísni za nápadně nevýhodných podmínek.

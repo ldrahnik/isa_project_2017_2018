@@ -1,0 +1,54 @@
+.TH TESTOVAC 1
+.SH NAME
+testovac - measure packets loss and RTT
+.SH SYNOPSIS
+.B ./testovac
+[OPTION]... [NODE]...
+.SH DESCRIPTION
+.B Testovac
+monitors entered site nodes. Print informations on standard output when is packet loss or exceedation Round trip time (RTT) over specified value.
+
+When is not specificated protocol and port with options -u and -p is used ICMP echo request/reply.
+When is selected protocol UDP packet send random data with size 64B and expect the same packet with the same content. When is specified port with option -l program listen on UDP port and on received packets reply the same packets with the same content. Program handle each of node parallely.
+When is not used option -r is tested only packets loss but no RTT. RTT is in this case included only to the summary statistics.
+.SH OPTIONS
+.TP
+.BR \-h " "
+show help message
+.TP
+.BR \-u " "
+select UDP protocol
+.TP
+.BR \-s " "
+size of data for sending (default value is 56B)
+.TP
+.BR \-t " " <interval>
+interval in seconds for which is packets loss evaluated (default value is 300s)
+.TP
+.BR \-i " " <interval>
+interval in ms how often send testing messages (default value is 100ms)
+.TP
+.BR \-w " " <timeout>
+how long is program waiting but only when is response not received (default value is 2s)
+.TP
+.BR \-p " " <port>
+specification of UDP port
+.TP
+.BR \-l " " <port>
+specification of listening UDP port
+.TP
+.BR \-r " " <value>
+RTT treshold - reports only when is value exceeded
+.TP
+.BR \-v " "
+verbose mode - program prints on stdout send packets
+.TP
+.BR <node>
+IPv4/IPv6/hostname address of node
+
+.SH AUTHOR
+.TP
+Written by Lukas Drahnik.
+
+
+.\}
