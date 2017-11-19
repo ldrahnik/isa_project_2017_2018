@@ -914,7 +914,7 @@ void* handleUdpIpv4Sending(void *threadarg) {
   memcpy(&send_sock_addr, addrinfo->ai_addr, addrinfo->ai_addrlen);
   send_sock_addr.sin_family = AF_INET;
   send_sock_addr.sin_port = htons(params->udp_port);
-  send_sock_addr.sin_addr = ((struct sockaddr_in*)addrinfo)->sin_addr;
+  send_sock_addr.sin_addr = ((struct sockaddr_in*)addrinfo->ai_addr)->sin_addr;
 
   // install signal handler for CTRL+C
   signal(SIGINT, catchsignal);
@@ -1052,6 +1052,9 @@ void* handleUdpServer(void *threadarg) {
   int no = 0;
   if(setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&no, sizeof(no))) {
     fprintf(stderr, "setsockopt() for IPV6_V6ONLY error.\n");
+
+    // close sock
+    close(sock);
 
     pthread_exit(NULL);
   }
