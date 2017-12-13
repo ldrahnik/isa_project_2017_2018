@@ -22,6 +22,7 @@ no RTT. RTT is in this case included only to the summary statistics.
 
 %build
 make
+make tex
 
 %install
 sudo rm -rf %{buildroot}
@@ -31,13 +32,17 @@ sudo make install BUILD_ROOT=%{buildroot} VERSION=%{version}
 sudo rm -rf %{buildroot}
 
 %files
-%dir /usr/local/lib/%{name}/
-/usr/local/lib/%{name}/%{name}
-/usr/local/bin/%{name}
-/usr/local/man/man1/%{name}.1
+%dir /usr/lib/%{name}/
+/usr/lib/%{name}/%{name}
+/usr/bin/%{name}
+/usr/share/man/man1/%{name}.1
 /usr/share/doc/%{name}/manual.pdf
 /usr/share/licenses/%{name}/LICENSE
 
 %changelog
-* Tue Oct 03 2017 Lukáš Drahník <xdrahn00@stud.fit.vutbr.cz, ldrahnik@gmail.com> - 0.1
-  - First rpm draft
+* Wed Dec 13 2017 Lukáš Drahník <xdrahn00@stud.fit.vutbr.cz, ldrahnik@gmail.com>
+- 0.1
+- Re-located from local folders to main folders, changed man location under share folder
+* Tue Oct 03 2017 Lukáš Drahník <xdrahn00@stud.fit.vutbr.cz, ldrahnik@gmail.com>
+- 0.1
+- First rpm draft

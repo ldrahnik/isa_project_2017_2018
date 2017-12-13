@@ -31,11 +31,11 @@ rebuild:	clean all
 
 BUILD_ROOT		  =
 VERSION					=
-INSTALL_DIR			= $(BUILD_ROOT)/usr/local/lib/$(PROJECT_NAME)
+INSTALL_DIR			= $(BUILD_ROOT)/usr/lib/$(PROJECT_NAME)
 INSTALL_SOURCES = $(PROJECT_NAME)
 
-MAN_DIR					= $(BUILD_ROOT)/usr/local/man/man1
-BIN_DIR					= $(BUILD_ROOT)/usr/local/bin
+MAN_DIR					= $(BUILD_ROOT)/usr/share/man/man1
+BIN_DIR					= $(BUILD_ROOT)/usr/bin
 
 SHARE_DIR				= $(BUILD_ROOT)/usr/share
 DOC_DIR					= $(SHARE_DIR)/doc/$(PROJECT_NAME)
@@ -50,7 +50,7 @@ install:
 	install -m 0644 $(INSTALL_SOURCES) $(INSTALL_DIR)
 	install -m 0644 $(PROJECT_LICENSE) $(LICENSES_DIR)
 	install -m 0644 $(PROJECT_DOC) $(DOC_DIR)
-	cd $(BUILD_ROOT) && sudo ln -sf /usr/local/lib/$(PROJECT_NAME)/$(PROJECT_NAME) $(BUILD_ROOT)/usr/local/bin/$(PROJECT_NAME)
+	cd $(BUILD_ROOT) && sudo ln -sf /usr/lib/$(PROJECT_NAME)/$(PROJECT_NAME) $(BUILD_ROOT)/usr/bin/$(PROJECT_NAME)
 	sudo chmod 0755 $(INSTALL_DIR)/$(PROJECT_NAME)
 	install -m 0644 $(PROJECT_MAN_PAGE) $(MAN_DIR)
 
