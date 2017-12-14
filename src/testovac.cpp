@@ -542,7 +542,6 @@ void* handleIcmpIpv6Receiving(void *threadarg) {
         recv = (struct icmp6_hdr *) (recv_buffer);
 
         if((ntohs(recv->icmp6_id) == pthread_args->node_index) && (recv->icmp6_type == ICMP6_ECHO_REPLY)) {
-
           out = (struct timeval *) (recv + 1);
 
           // set up waiting time for packet (for first packet arg -w (2s default), for next 2xRTT)
@@ -563,7 +562,7 @@ void* handleIcmpIpv6Receiving(void *threadarg) {
           strdup(inet_ntop(AF_INET6, &(receive_sock_addr.sin6_addr.s6_addr), node_addr_string, INET6_ADDRSTRLEN));
 
           // re-calculate
-          rtt_current = in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec);
+          rtt_current = 1e3*(in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec));
           rtt_max = (rtt_current > rtt_max)?rtt_current:rtt_max;
           rtt_min = (rtt_current < rtt_min)?rtt_current:rtt_min;
           rtt_sum += rtt_current;
@@ -706,7 +705,7 @@ void* handleIcmpIpv4Receiving(void *threadarg) {
           strdup(inet_ntop(AF_INET, &(receive_sock_addr.sin_addr.s_addr), node_addr_string, INET_ADDRSTRLEN));
 
           // re-calculate
-          rtt_current = in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec);
+          rtt_current = 1e3*(in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec));
           rtt_max = (rtt_current > rtt_max)?rtt_current:rtt_max;
           rtt_min = (rtt_current < rtt_min)?rtt_current:rtt_min;
           rtt_sum += rtt_current;
@@ -1210,7 +1209,7 @@ void* handleUdpIpv4Receiving(void *threadarg) {
           strdup(inet_ntop(AF_INET, &(receive_sock_addr.sin_addr.s_addr), node_addr_string, INET_ADDRSTRLEN));
 
           // re-calculate
-          rtt_current = in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec);
+          rtt_current = 1e3*(in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec));
           rtt_max = (rtt_current > rtt_max)?rtt_current:rtt_max;
           rtt_min = (rtt_current < rtt_min)?rtt_current:rtt_min;
           rtt_sum += rtt_current;
@@ -1337,7 +1336,7 @@ void* handleUdpIpv6Receiving(void *threadarg) {
 
           // is too late
           // lost packet
-          if((in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec)) > response_timeout_sec) {
+          if(1e3*(in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec)) > response_timeout_sec) {
             break;
           }
 
@@ -1347,7 +1346,7 @@ void* handleUdpIpv6Receiving(void *threadarg) {
           strdup(inet_ntop(AF_INET6, &(receive_sock_addr.sin6_addr.s6_addr), node_addr_string, INET6_ADDRSTRLEN));
 
           // re-calculate
-          rtt_current = in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec);
+          rtt_current = 1e3*(in.tv_sec - out->tv_sec + 1e-6*(in.tv_usec - out->tv_usec));
           rtt_max = (rtt_current > rtt_max)?rtt_current:rtt_max;
           rtt_min = (rtt_current < rtt_min)?rtt_current:rtt_min;
           rtt_sum += rtt_current;
