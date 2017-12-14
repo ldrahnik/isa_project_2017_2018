@@ -800,7 +800,7 @@ void* handleIcmpIpv6Sending(void *threadarg) {
 
     pthread_args->packets_sent_count++;
 
-    usleep(params->message_interval * 10^3);
+    usleep(params->message_interval * pow(10,3));
   }
 
   // close sockf
@@ -874,7 +874,7 @@ void* handleIcmpIpv4Sending(void *threadarg) {
 
     pthread_args->packets_sent_count++;
 
-    usleep(params->message_interval * 10^3);
+    usleep(params->message_interval * pow(10,3));
   }
 
   // close sock
@@ -938,7 +938,7 @@ void* handleUdpIpv4Sending(void *threadarg) {
 
     pthread_args->packets_sent_count++;
 
-    usleep(params->message_interval * 10^3);
+    usleep(params->message_interval * pow(10,3));
   }
 
  // clean
@@ -1002,7 +1002,7 @@ void* handleUdpIpv6Sending(void *threadarg) {
 
     pthread_args->packets_sent_count++;
 
-    usleep(params->message_interval * 10^3);
+    usleep(params->message_interval * pow(10,3));
   }
 
  // clean
