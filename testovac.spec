@@ -6,6 +6,7 @@ License:              OSS FIT VUT
 URL:                  https://github.com/ldrahnik/isa_1_project
 Source0:              https://github.com/ldrahnik/isa_1_project/archive/v%{version}.tar.gz
 BuildArch:            x86_64
+Requires:             libc libm libpthread libstdc++
 
 %description
 Print informations on standard output when is packet loss
@@ -45,9 +46,9 @@ sudo rm -rf %{buildroot}
 /usr/share/licenses/%{name}/LICENSE
 
 %changelog
-* Wed Dec 13 2017 Lukáš Drahník <xdrahn00@stud.fit.vutbr.cz, ldrahnik@gmail.com>
+* Fri Dec 15 2017 Lukáš Drahník <xdrahn00@stud.fit.vutbr.cz, ldrahnik@gmail.com>
 - 0.1
-- Add Requires & BuildRequires
+- Added Requires by using command rpm -qpR <rpm-file>
 * Wed Dec 13 2017 Lukáš Drahník <xdrahn00@stud.fit.vutbr.cz, ldrahnik@gmail.com>
 - 0.1
 - Re-located from local folders to main folders, changed man location under share folder
