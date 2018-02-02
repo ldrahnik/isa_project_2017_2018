@@ -7,6 +7,7 @@ URL:                  https://github.com/ldrahnik/isa_1_project
 Source0:              https://github.com/ldrahnik/isa_1_project/archive/v%{version}.tar.gz
 BuildArch:            x86_64
 Requires:             libc libm libpthread libstdc++
+BuildRequires:        make g++ latex bibtex dvips ps2pdf14
 
 %description
 Print informations on standard output when is packet loss
