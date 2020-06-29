@@ -6,13 +6,14 @@
 PROJECT_NAME     		= testovac
 PROJECT_MAN_PAGE		= testovac.1
 PROJECT_LICENSE	 		= LICENSE
-PROJECT_DOC					= doc/manual.pdf
-PROJECT_SPEC		 		= testovac.spec
+PROJECT_DOC				= manual.pdf
+PROJECT_DOC_FOLDER		= doc/
+PROJECT_SPEC		 	= testovac.spec
 PROJECT_SOURCES  		= src/testovac.cpp
 PROJECT_OBJECTS  		= $(PROJECT_SOURCES:.cpp=.o)
 
 CC              		= g++
-CFLAGS 							= -Wall -pedantic -Wextra -pthread
+CFLAGS 					= -Wall -pedantic -Wextra -pthread
 
 ###########################################
 
@@ -57,10 +58,13 @@ install:
 ############################################
 
 LOGIN = xdrahn00
-FILES = Makefile $(PROJECT_MAN_PAGE) $(PROJECT_DOC) $(PROJECT_SOURCES) $(PROJECT_LICENSE) $(PROJECT_SPEC)
+FILES = Makefile $(PROJECT_MAN_PAGE) $(PROJECT_SOURCES) $(PROJECT_LICENSE) $(PROJECT_SPEC) # exceptions are archive files placed in subfolders
 
 tar:
-	tar -cvzf $(LOGIN).tar $(FILES)
+	tar -cvzf $(LOGIN).tar $(FILES) -C $(PROJECT_DOC_FOLDER) $(PROJECT_DOC)
+
+untar:
+	rm -rf $(LOGIN) && mkdir -p $(LOGIN) && tar -xvzf $(LOGIN).tar -C $(LOGIN)
 
 rmtar:
 	rm -f $(LOGIN).tar

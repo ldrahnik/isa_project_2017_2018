@@ -51,3 +51,16 @@ Vytvořený příkaz `make install`.
 ## Testování programu:
 
 ## Odevzdané soubory:
+
+```
+xdrahn00
+├── LICENSE
+├── Makefile
+├── manual.pdf
+├── src
+│   └── testovac.cpp
+├── testovac.1
+└── testovac.spec
+
+1 directory, 6 files
+```
