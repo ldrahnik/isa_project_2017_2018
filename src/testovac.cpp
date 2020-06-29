@@ -5,26 +5,7 @@
  * Email:						  <xdrahn00@stud.fit.vutbr.cz>, <ldrahnik@gmail.com>
  */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <iostream>
-#include <pthread.h>
-#include <netdb.h>
-#include <errno.h>
-#include <signal.h>
-#include <time.h>
-#include <math.h>
-
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/time.h>
-
-#include <arpa/inet.h>
-#include <netinet/ip_icmp.h>
-#include <netinet/icmp6.h>
+#include "testovac.h"
 
 using namespace std;
 
@@ -70,68 +51,6 @@ const char *HELP_MSG = {
   "-r <value> -- RTT treshold - reports only when is value exceeded\n"
   "-v - verbose mode - program prints on stdout send packets\n"
   "<node> or <node;RTT>-- IPv4/IPv6/hostname address of node, RTT which has priority for each node over global RTT -r <value>\n"
-};
-
-/**
- * Node structure.
- */
-typedef struct node {
-  char* node;         // IPv4/IPv6/hostname adresa uzlu
-  int ecode;          // error code
-  float specific_rtt; // <uzel;RTT> default value is -1
-} TNode;
-
-/**
- * Terminal parameters:
- *    boolean values: int [0 = FALSE, 1 = TRUE]
- *    ecode: int [0 = DEFAULT IS OK, X = ERROR CODE]
- *    others: int, float [-1 = DEFAULT IS UNSET, X = SET VALUE]
- */
-typedef struct params {
-  int show_help_message;              // option h
-  int udp_enable;                     // option u
-  int size_of_data;                   // option s
-  int evaluation_interval;            // option t
-  int message_interval;               // option i
-  int response_timeout;               // option w
-  int udp_port;                       // option p
-  int udp_listen_port;                // option l
-  float rtt_value;                    // option r
-  int verbose_mode;                   // option v
-  int ecode;                          // error code
-  int nodes_count;
-  struct node *nodes;
-} TParams;
-
-/**
- * Arguments for pthread created for each node.
- */
-typedef struct pthread_args {
-  struct params *params;
-  int node_index;                     // start index is 0
-  struct addrinfo *addrinfo;
-  int packets_sent_count;
-  int sock;                           // in UDP case is used in both sides (sending, listening)
-} Tpthread_args;
-
-/**
- * Error codes.
- */
-enum ecodes {
-  EOK = 0,               // ok
-  EOPT = 1,              // invalid option (option argument is missing,
-                          // unknown option, unknown option character)
-  ENODE = 2,             // node is not valid (invalid IPv4 or IPv6 or hostname)
-  ETHREAD_CREATE = 3,    // pthread_create funcion returned error
-  ESOCKET_CREATE = 4     // socket function returned error
-};
-
-/**
- * Pseudoheader of UDP packet.
- */
-struct outdata_udp {
-  int id;
-  struct timeval tv;
 };
 
 /**

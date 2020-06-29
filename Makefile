@@ -9,9 +9,10 @@ PROJECT_LICENSE	 		= LICENSE
 PROJECT_DOC				= manual.pdf
 PROJECT_DOC_FOLDER		= doc/
 PROJECT_SPEC		 	= testovac.spec
-PROJECT_SOURCES  		= src/testovac.cpp
-PROJECT_OBJECTS  		= $(PROJECT_SOURCES:.cpp=.o)
-
+PROJECT_SOURCES_CODE	= $(shell find src/ -name *.cpp)
+PROJECT_SOURCES_HEADERS = src/*.h
+PROJECT_SOURCES			= $(PROJECT_SOURCES_CODE) $(PROJECT_SOURCES_HEADERS)
+PROJECT_OBJECTS			= $(PROJECT_SOURCES:%.cpp=%.o)
 CC              		= g++
 CFLAGS 					= -Wall -pedantic -Wextra -pthread
 
@@ -19,8 +20,8 @@ CFLAGS 					= -Wall -pedantic -Wextra -pthread
 
 all:			$(PROJECT_NAME)
 
-$(PROJECT_NAME):	$(PROJECT_OBJECTS)
-		$(CC) $(CFLAGS) $(PROJECT_OBJECTS) -o $@
+$(PROJECT_NAME): $(PROJECT_OBJECTS)
+		$(CC) $(CFLAGS) $(PROJECT_SOURCES) -o $@
 
 clean:
 	rm -rf *~ $(PROJECT_OBJECTS) $(PROJECT_NAME)
