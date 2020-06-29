@@ -15,7 +15,7 @@
 TParams getParams(int argc, char *argv[]) {
 
   // default params
-  TParams params = { 0, 0, -1, 300, 100, 2, -1, -1, -1, 0, EOK, 0 };
+  TParams params = { 0, 0, -1, 300, 100, 2, -1, -1, -1, 0, EOK, 0, NULL };
 
   // strtol endptr
   char *end_ptr;
@@ -94,6 +94,7 @@ TParams getParams(int argc, char *argv[]) {
           fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
         }
         params.ecode = EOPT;
+        break;
       default:
         fprintf (stderr, "At least one node is required.\n");
         params.ecode = EOPT;
@@ -174,8 +175,6 @@ int isValidHost(char* host) {
  * @return TNode
  */
 TNode getNode(char* host) {
-  int ecode = EOK;
-
   TNode node = { host, EOK, -1 };
 
   // node name

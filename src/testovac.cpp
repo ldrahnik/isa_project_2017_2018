@@ -99,7 +99,7 @@ void getCurrentTime(timeval* tv_current, time_t* curtime, char* time_buffer) {
  *
  * @return void
  */
-void printReportInfo(int packets_sent_count, int recv_packets, int recv_packets_exceeded_rtt_percent, int recv_packets_exceeded_rtt_count, float rtt_current, TNode* node, TParams* params, timeval* evaluation_interval_tv) {
+void printReportInfo(int recv_packets_exceeded_rtt_percent, int recv_packets_exceeded_rtt_count, float rtt_current, TNode* node, TParams* params, timeval* evaluation_interval_tv) {
 
   // current time with ms
   char* time_buffer = (char *)calloc(30, 1);
@@ -148,7 +148,7 @@ void printVerboseInfo(int recv_length, TNode* node, char* node_addr_string, doub
  *
  * @return void
  */
-void printSummaryInfo(int packets_sent_count, int recv_packets, double rtt_max, double rtt_min, double rtt_avg, double rtt_mdev, pthread_args* pthread_args, TNode* node, timeval* summary_interval_tv) {
+void printSummaryInfo(int recv_packets, double rtt_max, double rtt_min, double rtt_avg, double rtt_mdev, pthread_args* pthread_args, TNode* node, timeval* summary_interval_tv) {
 
   // current time with ms
   char* time_buffer = (char *)calloc(30, 1);
@@ -183,12 +183,10 @@ void printSummaryInfo(int packets_sent_count, int recv_packets, double rtt_max, 
 void* handleIcmpIpv6Receiving(void *threadarg) {
   struct pthread_args *pthread_args = (struct pthread_args *) threadarg;
   struct node node = (struct node) pthread_args->params->nodes[pthread_args->node_index];
-  struct addrinfo *addrinfo = pthread_args->addrinfo;
   TParams* params = (TParams*) pthread_args->params;
 
   socklen_t size;
   struct icmp6_hdr *recv;
-  struct ip6_hdr *ip;
   int recv_length;
   struct sockaddr_in6 receive_sock_addr;
   char* recv_buffer = (char *)calloc(IP_MAXPACKET, 1);
@@ -204,7 +202,6 @@ void* handleIcmpIpv6Receiving(void *threadarg) {
 
   // received packets
   int recv_packets = 0;
-  int recv_packets_loss_percent = 0;
 
   // received over rtt
   int recv_packets_exceeded_rtt_count = 0;
@@ -241,10 +238,10 @@ void* handleIcmpIpv6Receiving(void *threadarg) {
     do {
 
       // summary info
-      printSummaryInfo(pthread_args->packets_sent_count, recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
+      printSummaryInfo(recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
 
       // report info
-      printReportInfo(pthread_args->packets_sent_count, recv_packets, recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
+      printReportInfo(recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
 
       FD_ZERO(&my_set);
       FD_SET(sock, &my_set);
@@ -327,14 +324,13 @@ void* handleIcmpIpv6Receiving(void *threadarg) {
 void* handleIcmpIpv4Receiving(void *threadarg) {
   struct pthread_args *pthread_args = (struct pthread_args *) threadarg;
   struct node node = (struct node) pthread_args->params->nodes[pthread_args->node_index];
-  struct addrinfo *addrinfo = pthread_args->addrinfo;
   TParams* params = (TParams*) pthread_args->params;
   int sock = pthread_args->sock;
 
   socklen_t size;
   struct icmp *recv;
   struct ip *ip;
-  int recv_length, recv_length_without_ip;
+  int recv_length;
   struct sockaddr_in receive_sock_addr;
   char* recv_buffer = (char *)calloc(IP_MAXPACKET, 1);
   fd_set my_set;
@@ -350,7 +346,6 @@ void* handleIcmpIpv4Receiving(void *threadarg) {
 
   // received packets
   int recv_packets = 0;
-  int recv_packets_loss_percent = 0;
 
   // received over rtt
   int recv_packets_exceeded_rtt_count = 0;
@@ -379,10 +374,10 @@ void* handleIcmpIpv4Receiving(void *threadarg) {
     do {
 
       // summary info
-      printSummaryInfo(pthread_args->packets_sent_count, recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
+      printSummaryInfo(recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
 
       // report info
-      printReportInfo(pthread_args->packets_sent_count, recv_packets, recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
+      printReportInfo(recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
 
       FD_ZERO(&my_set);
       FD_SET(sock, &my_set);
@@ -468,7 +463,6 @@ void* handleIcmpIpv4Receiving(void *threadarg) {
  */
 void* handleIcmpIpv6Sending(void *threadarg) {
   struct pthread_args *pthread_args = (struct pthread_args *) threadarg;
-  struct node node = (struct node) pthread_args->params->nodes[pthread_args->node_index];
   struct addrinfo *addrinfo = pthread_args->addrinfo;
   TParams* params = (TParams*) pthread_args->params;
   int sock = pthread_args->sock;
@@ -538,7 +532,6 @@ void* handleIcmpIpv6Sending(void *threadarg) {
  */
 void* handleIcmpIpv4Sending(void *threadarg) {
   struct pthread_args *pthread_args = (struct pthread_args *) threadarg;
-  struct node node = (struct node) pthread_args->params->nodes[pthread_args->node_index];
   struct addrinfo *addrinfo = pthread_args->addrinfo;
   TParams* params = (TParams*) pthread_args->params;
   int sock = pthread_args->sock;
@@ -612,13 +605,12 @@ void* handleIcmpIpv4Sending(void *threadarg) {
  */
 void* handleUdpIpv4Sending(void *threadarg) {
   struct pthread_args *pthread_args = (struct pthread_args *) threadarg;
-  struct node node = (struct node) pthread_args->params->nodes[pthread_args->node_index];
   struct addrinfo *addrinfo = pthread_args->addrinfo;
   TParams* params = (TParams*) pthread_args->params;
   int sock = pthread_args->sock;
 
   struct outdata_udp *outdata_udp;
-  struct sockaddr_in send_sock_addr, recv_sock_addr;
+  struct sockaddr_in send_sock_addr;
 
   int udp_len = sizeof(struct outdata_udp) + params->size_of_data;
   char* send_buffer = (char *)calloc(udp_len, 1);
@@ -673,13 +665,12 @@ void* handleUdpIpv4Sending(void *threadarg) {
  */
 void* handleUdpIpv6Sending(void *threadarg) {
   struct pthread_args *pthread_args = (struct pthread_args *) threadarg;
-  struct node node = (struct node) pthread_args->params->nodes[pthread_args->node_index];
   struct addrinfo *addrinfo = pthread_args->addrinfo;
   TParams* params = (TParams*) pthread_args->params;
   int sock = pthread_args->sock;
 
   struct outdata_udp *outdata_udp;
-  struct sockaddr_in6 send_sock_addr, recv_sock_addr;
+  struct sockaddr_in6 send_sock_addr;
 
   int udp_len = sizeof(struct outdata_udp) + params->size_of_data;
   char* send_buffer = (char *)calloc(udp_len, 1);
@@ -855,7 +846,6 @@ void* handleUdpIpv4Receiving(void *threadarg) {
 
   // received packets
   int recv_packets = 0;
-  int recv_packets_loss_percent = 0;
 
   // received over rtt
   int recv_packets_exceeded_rtt_count = 0;
@@ -888,10 +878,10 @@ void* handleUdpIpv4Receiving(void *threadarg) {
     do {
 
       // summary info
-      printSummaryInfo(pthread_args->packets_sent_count, recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
+      printSummaryInfo(recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
 
       // report info
-      printReportInfo(pthread_args->packets_sent_count, recv_packets, recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
+      printReportInfo(recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
 
       FD_ZERO(&my_set);
       FD_SET(sock, &my_set);
@@ -991,7 +981,6 @@ void* handleUdpIpv6Receiving(void *threadarg) {
 
   // received packets
   int recv_packets = 0;
-  int recv_packets_loss_percent = 0;
 
   // received over rtt
   int recv_packets_exceeded_rtt_count = 0;
@@ -1025,10 +1014,10 @@ void* handleUdpIpv6Receiving(void *threadarg) {
     do {
 
       // summary info
-      printSummaryInfo(pthread_args->packets_sent_count, recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
+      printSummaryInfo(recv_packets, rtt_max, rtt_min, rtt_avg, rtt_mdev, pthread_args, &node, &summary_interval_tv);
 
       // report info
-      printReportInfo(pthread_args->packets_sent_count, recv_packets, recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
+      printReportInfo(recv_packets_exceeded_rtt_percent, recv_packets_exceeded_rtt_count, rtt_current, &node, params, &evaluation_interval_tv);
 
       FD_ZERO(&my_set);
       FD_SET(sock, &my_set);
@@ -1106,7 +1095,7 @@ void* handleUdpIpv6Receiving(void *threadarg) {
  *
  * @return void
  */
-void clean(TParams *params, Tpthread_args* threads_args[]) {
+void clean(TParams *params, pthread_t* threads, Tpthread_args* threads_args[]) {
   for (int index = 0; index < params->nodes_count; index++) {
 
     // close sock
@@ -1117,9 +1106,14 @@ void clean(TParams *params, Tpthread_args* threads_args[]) {
 
     // delete ThreadArgs[] (created with new)
     delete threads_args[index];
+
+    // delete thread
+    //delete threads[index];
   }
   // delete TNode[] (created with new)
   delete params->nodes;
+  
+  delete[] threads;
 }
 
 /**
@@ -1160,8 +1154,8 @@ int main(int argc, char *argv[]) {
   struct addrinfo *results;
 
   int index;
-  pthread_t threads[params.nodes_count];
-  Tpthread_args* threads_args[params.nodes_count];
+  pthread_t* threads = new pthread_t[params.nodes_count];
+  Tpthread_args* threads_args = new Tpthread_args[params.nodes_count];
 
   // multithread handling of nodes
   for (index = 0; index < params.nodes_count; index++) {
@@ -1181,7 +1175,7 @@ int main(int argc, char *argv[]) {
     threadarg->packets_sent_count = 0;
     threadarg->node_index = index;
     threadarg->addrinfo = results;
-    threads_args[index] = threadarg;
+    threads_args[index] = *threadarg;
 
     // create sending add receiving thread per node
 
@@ -1298,7 +1292,7 @@ int main(int argc, char *argv[]) {
   }
 
   // clean
-  clean(&params, threads_args);
+  clean(&params, threads, &threads_args);
 
   return ecode;
 }

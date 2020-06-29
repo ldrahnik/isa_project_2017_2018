@@ -54,9 +54,9 @@ struct outdata_udp {
 unsigned short checksum(unsigned char *addr, int count);
 void catchsignal(int sig);
 void getCurrentTime(timeval* tv_current, time_t* curtime, char* time_buffer);
-void printReportInfo(int packets_sent_count, int recv_packets, int recv_packets_exceeded_rtt_percent, int recv_packets_exceeded_rtt_count, float rtt_current, TNode* node, TParams* params, timeval* evaluation_interval_tv);
+void printReportInfo(int recv_packets_exceeded_rtt_percent, int recv_packets_exceeded_rtt_count, float rtt_current, TNode* node, TParams* params, timeval* evaluation_interval_tv);
 void printVerboseInfo(int recv_length, TNode* node, char* node_addr_string, double rtt_current);
-void printSummaryInfo(int packets_sent_count, int recv_packets, double rtt_max, double rtt_min, double rtt_avg, double rtt_mdev, pthread_args* pthread_args, TNode* node, timeval* summary_interval_tv);
+void printSummaryInfo(int recv_packets, double rtt_max, double rtt_min, double rtt_avg, double rtt_mdev, pthread_args* pthread_args, TNode* node, timeval* summary_interval_tv);
 void* handleIcmpIpv6Receiving(void *threadarg);
 void* handleIcmpIpv4Receiving(void *threadarg);
 void* handleIcmpIpv6Sending(void *threadarg);
@@ -66,7 +66,7 @@ void* handleUdpIpv6Sending(void *threadarg);
 void* handleUdpServer(void *threadarg);
 void* handleUdpIpv4Receiving(void *threadarg);
 void* handleUdpIpv6Receiving(void *threadarg);
-void clean(TParams *params, Tpthread_args* threads_args[]);
+void clean(TParams *params, pthread_t* threads, Tpthread_args* threads_args[]);
 int main(int argc, char *argv[]);
 
 #endif
