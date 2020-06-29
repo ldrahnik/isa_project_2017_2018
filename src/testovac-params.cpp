@@ -29,7 +29,7 @@ TParams getParams(int argc, char *argv[]) {
     switch (c) {
       case 'h':
         params.show_help_message = 1;
-        break;
+        return params;
       case 'u':
         params.udp_enable = 1;
         break;
@@ -98,6 +98,12 @@ TParams getParams(int argc, char *argv[]) {
         fprintf (stderr, "At least one node is required.\n");
         params.ecode = EOPT;
     }
+  }
+
+  // no args - show help message
+  if(argc == 1) {
+     params.show_help_message = 1;
+     return params;
   }
 
   // validation of combination of udp and udp port options

@@ -9,6 +9,7 @@ Měření ztrátovosti a RTT
 ## Příklad spuštění:
 
 ```
+./testovac -h
 Testovac
 
 monitors entered site nodes. Print informations on standard output when is
