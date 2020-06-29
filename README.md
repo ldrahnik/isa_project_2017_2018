@@ -4,7 +4,9 @@ ASSESSMENT
 20/20b (no assessment report)
 
 Měření ztrátovosti a RTT
-============
+========================
+
+Program monitoruje zadané síťové uzly. Pokud je paket prohlášený za ztracený nebo je překročená RTT hodnota pro daný uzel, je informace vypsána na standartní výstup. Pokud není vyžádán UDP protokol, využívají se ICMP zprávy echo request / reply. Pokud je UDP protokol vyžádaný přepínačem `-u` (je nutné uvést i port přepínačem `-p`), program zasílá náhodná data o velikosti 64B (lze změnit přepínačem `-s`), které poté kontroluje zda jsou přijata bez chyby. Pokud je uvedený UDP port přepínačem `-l`, program na něm naslouchá a všechny příchozí pakety odesílá zpět odesílateli s totožným obsahem. Program kontroluje všechny zadané síťové uzly paralelně. Pokud není uveden přepínač `-r`, je testována pouze ztrátovost paketů, ne RTT. RTT je v tomto případě zahrnuto pouze do celkové statistiky.
 
 ## Příklad spuštění:
 
