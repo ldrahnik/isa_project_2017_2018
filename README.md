@@ -58,9 +58,13 @@ xdrahn00
 ├── Makefile
 ├── manual.pdf
 ├── src
-│   └── testovac.cpp
+│   ├── testovac.cpp
+│   ├── testovac-error.h
+│   ├── testovac.h
+│   ├── testovac-params.cpp
+│   └── testovac-params.h
 ├── testovac.1
 └── testovac.spec
 
-1 directory, 6 files
+1 directory, 10 files
 ```

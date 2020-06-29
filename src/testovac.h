@@ -8,6 +8,9 @@
 #ifndef _testovac_H_
 #define _testovac_H_
 
+#include "testovac-params.h"
+#include "testovac-error.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,37 +33,6 @@
 #include <netinet/icmp6.h>
 
 /**
- * Node structure.
- */
-typedef struct node {
-  char* node;         // IPv4/IPv6/hostname adresa uzlu
-  int ecode;          // error code
-  float specific_rtt; // <uzel;RTT> default value is -1
-} TNode;
-
-/**
- * Terminal parameters:
- *    boolean values: int [0 = FALSE, 1 = TRUE]
- *    ecode: int [0 = DEFAULT IS OK, X = ERROR CODE]
- *    others: int, float [-1 = DEFAULT IS UNSET, X = SET VALUE]
- */
-typedef struct params {
-  int show_help_message;              // option h
-  int udp_enable;                     // option u
-  int size_of_data;                   // option s
-  int evaluation_interval;            // option t
-  int message_interval;               // option i
-  int response_timeout;               // option w
-  int udp_port;                       // option p
-  int udp_listen_port;                // option l
-  float rtt_value;                    // option r
-  int verbose_mode;                   // option v
-  int ecode;                          // error code
-  int nodes_count;
-  struct node *nodes;
-} TParams;
-
-/**
  * Arguments for pthread created for each node.
  */
 typedef struct pthread_args {
@@ -72,18 +44,6 @@ typedef struct pthread_args {
 } Tpthread_args;
 
 /**
- * Error codes.
- */
-enum ecodes {
-  EOK = 0,               // ok
-  EOPT = 1,              // invalid option (option argument is missing,
-                          // unknown option, unknown option character)
-  ENODE = 2,             // node is not valid (invalid IPv4 or IPv6 or hostname)
-  ETHREAD_CREATE = 3,    // pthread_create funcion returned error
-  ESOCKET_CREATE = 4     // socket function returned error
-};
-
-/**
  * Pseudoheader of UDP packet.
  */
 struct outdata_udp {
@@ -93,9 +53,6 @@ struct outdata_udp {
 
 unsigned short checksum(unsigned char *addr, int count);
 void catchsignal(int sig);
-int isValidHost(char* host);
-TNode getNode(char* host);
-TParams getParams(int argc, char *argv[]);
 void getCurrentTime(timeval* tv_current, time_t* curtime, char* time_buffer);
 void printReportInfo(int packets_sent_count, int recv_packets, int recv_packets_exceeded_rtt_percent, int recv_packets_exceeded_rtt_count, float rtt_current, TNode* node, TParams* params, timeval* evaluation_interval_tv);
 void printVerboseInfo(int recv_length, TNode* node, char* node_addr_string, double rtt_current);
