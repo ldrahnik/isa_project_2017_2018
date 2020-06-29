@@ -39,6 +39,19 @@ Options:
 <node> or <node;RTT>-- IPv4/IPv6/hostname address of node, RTT which has priority for each node over global RTT -r <value>
 ```
 
+```
+sudo ./testovac localhost -v
+2020-06-29 17:11:34.24 104 bytes from localhost (127.0.0.1) time=0.126 ms
+2020-06-29 17:11:34.34 104 bytes from localhost (127.0.0.1) time=0.035 ms
+2020-06-29 17:11:34.44 104 bytes from localhost (127.0.0.1) time=0.036 ms
+2020-06-29 17:11:34.54 104 bytes from localhost (127.0.0.1) time=0.033 ms
+2020-06-29 17:11:34.64 104 bytes from localhost (127.0.0.1) time=0.032 ms
+2020-06-29 17:11:34.74 104 bytes from localhost (127.0.0.1) time=0.032 ms
+2020-06-29 17:11:34.84 104 bytes from localhost (127.0.0.1) time=0.032 ms
+2020-06-29 17:11:34.94 104 bytes from localhost (127.0.0.1) time=0.031 ms
+2020-06-29 17:11:35.04 104 bytes from localhost (127.0.0.1) time=0.138 ms
+```
+
 ## Omezení programu:
 
 ## Rozšíření programu:
