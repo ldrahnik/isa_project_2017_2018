@@ -12,7 +12,8 @@ PROJECT_SPEC		 	= testovac.spec
 PROJECT_SOURCES_CODE	= $(shell find src/ -name *.cpp)
 PROJECT_SOURCES_HEADERS = src/*.h
 PROJECT_SOURCES			= $(PROJECT_SOURCES_CODE) $(PROJECT_SOURCES_HEADERS)
-PROJECT_OBJECTS			= $(PROJECT_SOURCES:%.cpp=%.o)
+PROJECT_OBJECTS			= $(PROJECT_SOURCES:%.cpp=%.o) 
+PROJECT_OBJECT_FILES	= src/*.o
 CC              		= g++
 CFLAGS 					= -Wall -pedantic -Wextra -pthread
 
@@ -24,7 +25,7 @@ $(PROJECT_NAME): $(PROJECT_OBJECTS)
 		$(CC) $(CFLAGS) $(PROJECT_SOURCES) -o $@
 
 clean:
-	rm -rf *~ $(PROJECT_OBJECTS) $(PROJECT_NAME)
+	rm -rf *~ $(PROJECT_OBJECT_FILES) $(PROJECT_NAME)
 	cd doc && make clean
 
 rebuild:	clean all
