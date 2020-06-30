@@ -66,6 +66,14 @@ Vytvořený příkaz `make install`.
 
 ## Testování programu:
 
+```
+ make test
+bash ./tests/tests.sh
+*******TEST 1 PASSED - IPv4
+*******TEST 2 PASSED - IPv6
+*******TEST 3 PASSED - UDP server
+```
+
 ## Odevzdané soubory:
 
 ```
@@ -80,7 +88,11 @@ xdrahn00
 │   ├── testovac-params.cpp
 │   └── testovac-params.h
 ├── testovac.1
-└── testovac.spec
+├── testovac.spec
+└── tests
+    ├── tests.sh
+    └── tmp
+        └── .gitkeep
 
-1 directory, 10 files
+3 directories, 12 files
 ```

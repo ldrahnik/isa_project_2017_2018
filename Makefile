@@ -14,6 +14,7 @@ PROJECT_SOURCES_HEADERS = src/*.h
 PROJECT_SOURCES			= $(PROJECT_SOURCES_CODE) $(PROJECT_SOURCES_HEADERS)
 PROJECT_OBJECTS			= $(PROJECT_SOURCES:%.cpp=%.o) 
 PROJECT_OBJECT_FILES	= src/*.o
+PROJECT_TEST_DIRECTORY	= ./tests
 CC              		= g++
 CFLAGS 					= -Wall -pedantic -Wextra -pthread
 
@@ -25,24 +26,24 @@ $(PROJECT_NAME): $(PROJECT_OBJECTS)
 		$(CC) $(CFLAGS) $(PROJECT_SOURCES) -o $@
 
 clean:
-	rm -rf *~ $(PROJECT_OBJECT_FILES) $(PROJECT_NAME)
+	rm -rf *~ $(PROJECT_OBJECT_FILES) $(PROJECT_NAME) $(LOGIN).tar $(LOGIN)
 	cd doc && make clean
 
 rebuild:	clean all
 
 ############################################
 
-BUILD_ROOT		  =
+BUILD_ROOT				=
 VERSION					=
-INSTALL_DIR			= $(BUILD_ROOT)/usr/lib/$(PROJECT_NAME)
-INSTALL_SOURCES = $(PROJECT_NAME)
+INSTALL_DIR				= $(BUILD_ROOT)/usr/lib/$(PROJECT_NAME)
+INSTALL_SOURCES 		= $(PROJECT_NAME)
 
 MAN_DIR					= $(BUILD_ROOT)/usr/share/man/man1
 BIN_DIR					= $(BUILD_ROOT)/usr/bin
 
 SHARE_DIR				= $(BUILD_ROOT)/usr/share
 DOC_DIR					= $(SHARE_DIR)/doc/$(PROJECT_NAME)
-LICENSES_DIR		= $(SHARE_DIR)/licenses/$(PROJECT_NAME)
+LICENSES_DIR			= $(SHARE_DIR)/licenses/$(PROJECT_NAME)
 
 install:
 	mkdir -p $(INSTALL_DIR)
@@ -60,9 +61,11 @@ install:
 ############################################
 
 LOGIN = xdrahn00
-FILES = Makefile $(PROJECT_MAN_PAGE) $(PROJECT_SOURCES) $(PROJECT_LICENSE) $(PROJECT_SPEC) # exceptions are archive files placed in subfolders
+FILES = Makefile $(PROJECT_MAN_PAGE) $(PROJECT_SOURCES) $(PROJECT_LICENSE) $(PROJECT_SPEC) $(PROJECT_TEST_DIRECTORY) # exceptions are archive files placed in subfolders
 
 tar:
+	make tex
+
 	tar -cvzf $(LOGIN).tar $(FILES) -C $(PROJECT_DOC_FOLDER) $(PROJECT_DOC)
 
 untar:
@@ -71,7 +74,15 @@ untar:
 rmtar:
 	rm -f $(LOGIN).tar
 
+tree:
+	tree -a $(LOGIN)
+
 ############################################
 
 tex:
 	cd doc && make && make manual.ps && make manual.pdf
+
+############################################
+
+test:
+	bash $(PROJECT_TEST_DIRECTORY)/tests.sh
